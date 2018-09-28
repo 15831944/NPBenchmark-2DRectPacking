@@ -16,7 +16,7 @@
 
 #include "Common.h"
 #include "PbReader.h"
-#include "GateAssignment.pb.h"
+#include "RectPacking.pb.h"
 
 
 namespace szx {
@@ -24,11 +24,11 @@ namespace szx {
 class Problem {
     #pragma region Type
 public:
-    struct Input : public pb::GateAssignment::Input {
+    struct Input : public pb::RectPacking::Input {
         bool load(const String &path) { return pb::load(path, *this); }
     };
 
-    struct Output : public pb::GateAssignment::Output {
+    struct Output : public pb::RectPacking::Output {
         bool save(const String &path, pb::Submission &submission) const {
             std::ofstream ofs(path);
             if (!ofs.is_open()) { return false; }
@@ -47,7 +47,7 @@ public:
             return true;
         }
 
-        ID flightNumOnBridge = 0;
+        float useRatio = 0;
     };
     #pragma endregion Type
 

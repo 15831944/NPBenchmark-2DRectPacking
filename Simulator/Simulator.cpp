@@ -168,11 +168,45 @@ void Simulator::parallelBenchmark(int repeat) {
 }
 
 void Simulator::generateInstance(const InstanceTrait &trait) {
-    Random rand;
+	Random rand;
+	int cuttingTimes = rand.pick(trait.cuttingTimes.begin, trait.cuttingTimes.end);
+	int edge = trait.edge;
+	struct Rect {
+		int width;
+		int height;
+	};
+	vector<Rect> rects;
+	Rect rect;
+	rect.height = edge;
+	rect.width = edge;
+	rects.push_back(rect);
+	for (int i = 0; i < cuttingTimes; i++) {
+		int idRand = rand.pick(0, rects.size());
+		//cutting a random rectangle into two part, then rotate the new one;
+		if (rects[idRand].height <= 2)
+			continue;
+		int cuttingHeight = rects[idRand].height;
+		int height = rand.pick(1, cuttingHeight-1);
+		rects[idRand].height = rects[idRand].width;
+		rects[idRand].width = cuttingHeight - height;
+		rect.width = height;
+		rect.height = rects[idRand].width;
+		rects.push_back(rect);
+	}
+	Problem::Input  input;
+	//cut the rectangle into two parts randomly in many times
+	for (int i = 0; i < rects.size(); i++) {
+		auto &rectangle(*input.add_rectangles());
+		rectangle.set_id(i);
+		rectangle.set_height(rects[i].height);
+		rectangle.set_width(rects[i].width);
 
-    int gateNum = rand.pick(trait.gateNum.begin, trait.gateNum.end);
-    int flightNum = rand.pick(trait.flightNum.begin, trait.flightNum.end);
-
+		
+	}
+	
+/*
+	int gateNum = rand.pick(trait.gateNum.begin, trait.gateNum.end);
+	int flightNum = rand.pick(trait.flightNum.begin, trait.flightNum.end);
     Problem::Input input;
     input.mutable_airport()->set_bridgenum(rand.pick(trait.bridgeNum.begin, trait.bridgeNum.end));
     for (int g = 0; g < gateNum; ++g) {
@@ -200,12 +234,10 @@ void Simulator::generateInstance(const InstanceTrait &trait) {
             flight.add_incompatiblegates(pickedGates[ig]);
         }
     }
-
+	*/
     ostringstream path;
-    path << InstanceDir() << "rand.g" << input.airport().gates().size()
-        << "b" << input.airport().bridgenum()
-        << "f" << input.flights().size()
-        << "h" << trait.horizonLen << ".json";
+    path << InstanceDir() << "rand.g" << input.rectangles().size()
+        << "r" << ".json";
     save(path.str(), input);
 }
 

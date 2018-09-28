@@ -6,7 +6,7 @@
 #include "Visualizer.h"
 
 #include "../Solver/PbReader.h"
-#include "../Solver/GateAssignment.pb.h"
+#include "../Solver/RectPacking.pb.h"
 
 
 using namespace std;
@@ -39,10 +39,10 @@ int main(int argc, char *argv[]) {
         cin >> outputPath;
     }
 
-    pb::GateAssignment::Input input;
+    pb::RectPacking::Input input;
     if (!load(inputPath, input)) { return ~CheckerFlag::IoError; }
 
-    pb::GateAssignment::Output output;
+    pb::RectPacking::Output output;
     ifstream ifs(outputPath);
     if (!ifs.is_open()) { return ~CheckerFlag::IoError; }
     string submission;
@@ -50,8 +50,9 @@ int main(int argc, char *argv[]) {
     ostringstream oss;
     oss << ifs.rdbuf();
     jsonToProtobuf(oss.str(), output);
-
+	
     // check solution.
+	/*
     int error = 0;
     int flightNumOnBridge = 0;
     if (output.assignments().size() != input.flights().size()) { error |= CheckerFlag::FormatError; }
@@ -100,6 +101,7 @@ int main(int argc, char *argv[]) {
             false, to_string(f), "000000", incompat ? "00c00080" : "4080ff80");
     }
     draw.end();
-
+	
     return (error == 0) ? flightNumOnBridge : ~error;
+	*/
 }

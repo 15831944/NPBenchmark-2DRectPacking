@@ -172,13 +172,13 @@ bool Solver::solve() {
 
     Log(LogSwitch::Szx::Framework) << "collect best result among all workers." << endl;
     int bestIndex = -1;
-    Length bestWidth = 0;
+    float bestRatio = 0;
     for (int i = 0; i < workerNum; ++i) {
         if (!success[i]) { continue; }
-        Log(LogSwitch::Szx::Framework) << "worker " << i << " got " << solutions[i].flightNumOnBridge << endl;
-        if (solutions[i].flightNumOnBridge <= bestWidth) { continue; }
+        Log(LogSwitch::Szx::Framework) << "worker " << i << " got " << solutions[i].useRatio << endl;
+        if (solutions[i].useRatio <= bestRatio) { continue; }
         bestIndex = i;
-        bestWidth = solutions[i].flightNumOnBridge;
+        bestRatio = solutions[i].useRatio;
     }
 
     env.rid = to_string(bestIndex);
@@ -195,7 +195,7 @@ void Solver::record() const {
 
     System::MemoryUsage mu = System::peakMemoryUsage();
 
-    Length obj = output.flightNumOnBridge;
+    float obj = output.useRatio;
     Length checkerObj = -1;
     bool feasible = check(checkerObj);
 
@@ -204,13 +204,13 @@ void Solver::record() const {
         << env.rid << ","
         << env.instPath << ","
         << feasible << "," << (obj - checkerObj) << ","
-        << output.flightNumOnBridge << ","
+        << output.useRatio << ","
         << timer.elapsedSeconds() << ","
         << mu.physicalMemory << "," << mu.virtualMemory << ","
         << env.randSeed << ","
         << cfg.toBriefStr() << ","
         << generation << "," << iteration << ","
-        << (100.0 * output.flightNumOnBridge / input.flights().size()) << "%,";
+        << (100.0 * output.useRatio) << "%,";
 
     // record solution vector.
     // EXTEND[szx][2]: save solution in log.
@@ -256,6 +256,8 @@ bool Solver::check(Length &checkerObj) const {
 }
 
 void Solver::init() {
+	aux.isCompatible.resize(input.rectangles_size(), List<bool>(input.rectangles_size(), true));
+	/*
     aux.isCompatible.resize(input.flights().size(), List<bool>(input.airport().gates().size(), true));
     ID f = 0;
     for (auto flight = input.flights().begin(); flight != input.flights().end(); ++flight, ++f) {
@@ -263,31 +265,51 @@ void Solver::init() {
             aux.isCompatible[f][*ig] = false;
         }
     }
+	*/
 }
 
 bool Solver::optimize(Solution &sln, ID workerId) {
-    Log(LogSwitch::Szx::Framework) << "worker " << workerId << " starts." << endl;
+	Log(LogSwitch::Szx::Framework) << "worker " << workerId << " starts." << endl;
+	Random rand;
+	int rectangleNum = input.rectangles_size();
+	bool status = true;
+	auto &placements(*sln.mutable_placements());
+	for (int i = 0; !timer.isTimeOut() && (i < rectangleNum); i++) {
+		// give the placements randomly
+		int x = rand.pick(0, 100);
+		int y = rand.pick(0, 100);
+		placements[i].set_id(i);
+		placements[i].set_x(x);
+		placements[i].set_y(y);
+		placements[i].set_rotated(false);
+		
+	}
+			
+	/*
+	Log(LogSwitch::Szx::Framework) << "worker " << workerId << " starts." << endl;
 
-    ID gateNum = input.airport().gates().size();
-    ID bridgeNum = input.airport().bridgenum();
-    ID flightNum = input.flights().size();
+	ID gateNum = input.airport().gates().size();        
+	ID bridgeNum = input.airport().bridgenum();
+	ID flightNum = input.flights().size();
 
-    // reset solution state.
-    bool status = true;
-    auto &assignments(*sln.mutable_assignments());
-    assignments.Resize(flightNum, Problem::InvalidId);
-    sln.flightNumOnBridge = 0;
-
-
-    // TODO[0]: replace the following random assignment with your own algorithm.
-    for (ID f = 0; !timer.isTimeOut() && (f < flightNum); ++f) {
-        assignments[f] = rand.pick(gateNum);
-        if (assignments[f] < bridgeNum) { ++sln.flightNumOnBridge; } // record obj.
-    }
+	// reset solution state.
+	bool status = true;
+	auto &assignments(*sln.mutable_assignments());
+	assignments.Resize(flightNum, Problem::InvalidId);
+	sln.flightNumOnBridge = 0;
 
 
-    Log(LogSwitch::Szx::Framework) << "worker " << workerId << " ends." << endl;
-    return status;
+	// TODO[0]: replace the following random assignment with your own algorithm.
+	for (ID f = 0; !timer.isTimeOut() && (f < flightNum); ++f) {
+		assignments[f] = rand.pick(gateNum);
+		if (assignments[f] < bridgeNum) { ++sln.flightNumOnBridge; } // record obj.
+	}
+
+	*/
+	Log(LogSwitch::Szx::Framework) << "worker " << workerId << " ends." << endl;
+	return status;
+	
+    
 }
 #pragma endregion Solver
 
