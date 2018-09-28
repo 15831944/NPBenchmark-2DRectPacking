@@ -9,6 +9,7 @@
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
+Lib/protobuf/
 
 # Build results
 [Dd]ebug/
@@ -249,3 +250,4 @@ ModelManifest.xml
 /Deploy/log.csv
 /Deploy/Solution/*.json*
 /Deploy/Visualization/*.html
+protobuf
