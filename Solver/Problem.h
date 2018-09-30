@@ -41,7 +41,7 @@ public:
             submission.set_language("C++");
             submission.set_compiler("VS2017");
             submission.set_os("Windows 10");
-            submission.set_problem("GateAssignment");
+            submission.set_problem("RectPacking");
 
             ofs << protobufToJson(submission, false) << std::endl << protobufToJson(*this);
             return true;

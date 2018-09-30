@@ -194,6 +194,8 @@ void Simulator::generateInstance(const InstanceTrait &trait) {
 		rects.push_back(rect);
 	}
 	Problem::Input  input;
+	Problem::Output output;
+
 	//cut the rectangle into two parts randomly in many times
 	for (int i = 0; i < rects.size(); i++) {
 		auto &rectangle(*input.add_rectangles());
@@ -204,37 +206,6 @@ void Simulator::generateInstance(const InstanceTrait &trait) {
 		
 	}
 	
-/*
-	int gateNum = rand.pick(trait.gateNum.begin, trait.gateNum.end);
-	int flightNum = rand.pick(trait.flightNum.begin, trait.flightNum.end);
-    Problem::Input input;
-    input.mutable_airport()->set_bridgenum(rand.pick(trait.bridgeNum.begin, trait.bridgeNum.end));
-    for (int g = 0; g < gateNum; ++g) {
-        auto &gate(*input.mutable_airport()->add_gates());
-        gate.set_id(g);
-        gate.set_mingap(30);
-    }
-    for (auto f = 0; f < flightNum; ++f) {
-        auto &flight(*input.add_flights());
-        flight.set_id(f);
-
-        int turnaroudLen = rand.pick(trait.turnaroundLen.begin, trait.turnaroundLen.end);
-        if (turnaroudLen > 3 * 60) { // reduce long turnaround.
-            turnaroudLen = rand.pick(trait.turnaroundLen.begin, trait.turnaroundLen.end);
-        }
-        int turnaroundBegin = rand.pick(0, trait.horizonLen - turnaroudLen);
-        flight.mutable_turnaround()->set_begin(turnaroundBegin);
-        flight.mutable_turnaround()->set_end(turnaroundBegin + turnaroudLen);
-
-        int incompatibleGateNum = rand.pick(trait.incompatibleGateNumPerFlight.begin, trait.incompatibleGateNumPerFlight.end);
-        Sampling sample(rand, incompatibleGateNum);
-        List<int> pickedGates(incompatibleGateNum + 1);
-        for (auto g = 0; g < gateNum; ++g) { pickedGates[sample.isPicked()] = g; }
-        for (auto ig = 1; ig <= incompatibleGateNum; ++ig) {
-            flight.add_incompatiblegates(pickedGates[ig]);
-        }
-    }
-	*/
     ostringstream path;
     path << InstanceDir() << "rand.g" << input.rectangles().size()
         << "r" << ".json";

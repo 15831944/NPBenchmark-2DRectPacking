@@ -17,9 +17,8 @@ int main(int argc, char *argv[]) {
     enum CheckerFlag {
         IoError = 0x0,
         FormatError = 0x1,
-        FlightNotAssignedError = 0x2,
-        IncompatibleAssignmentError = 0x4,
-        FlightOverlapError = 0x8
+		CoordinateOverError = 0x2,
+        RectangleOverlapError = 0x4
     };
 
     string inputPath;
@@ -50,6 +49,33 @@ int main(int argc, char *argv[]) {
     ostringstream oss;
     oss << ifs.rdbuf();
     jsonToProtobuf(oss.str(), output);
+
+	int error = 0;
+	float useRatio = 0;
+	int bufferEdge = output.length();
+	int areaSum = 0;
+	if (output.placements().size() != input.rectangles().size()) { error |= CheckerFlag::FormatError; }
+	for (auto rect1 = output.placements().begin(); rect1 != output.placements().end(); ++rect1) {
+		int width1 = input.rectangles(rect1->id).width;
+		int height1 = input.rectangles(rect1->id).height;
+		areaSum += width1 * height1;
+		if (rect1->x > bufferEdge || rect1->y > bufferEdge || rect1->x < 0 || rect1->y < 0 ||
+			rect1->x + width1 > bufferEdge || rect1->y + height1 > bufferEdge) {
+			error |= CheckerFlag::CoordinateOverError;	
+			break;
+		}
+		for (auto rect2 = rect1 + 1; rect2 != output.placements().end(); ++rect2) {
+			int width2 = input.rectangles(rect2->id).width;
+			int height2 = input.rectangles(rect2->id).height;
+			if (rect1->x + width1 > rect2->x && rect1->x < rect2->x + width2 ||
+				rect1->y + height1 > rect2->y && rect1->y < rect2->y + height2 ) {
+				error |= CheckerFlag::RectangleOverlapError;
+				break;
+			}
+		}
+	}
+	useRatio = areaSum / bufferEdge;
+		
 	
     // check solution.
 	/*
