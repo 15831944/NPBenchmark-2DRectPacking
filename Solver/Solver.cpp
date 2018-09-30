@@ -233,11 +233,10 @@ void Solver::record() const {
 bool Solver::check(Length &checkerObj) const {
     #if SZX_DEBUG
     enum CheckerFlag {
-        IoError = 0x0,
-        FormatError = 0x1,
-        FlightNotAssignedError = 0x2,
-        IncompatibleAssignmentError = 0x4,
-        FlightOverlapError = 0x8
+		IoError = 0x0,
+		FormatError = 0x1,
+		CoordinateOverError = 0x2,
+		RectangleOverlapError = 0x4
     };
 
     checkerObj = System::exec("Checker.exe " + env.instPath + " " + env.solutionPathWithTime());
@@ -245,9 +244,9 @@ bool Solver::check(Length &checkerObj) const {
     checkerObj = ~checkerObj;
     if (checkerObj == CheckerFlag::IoError) { Log(LogSwitch::Checker) << "IoError." << endl; }
     if (checkerObj & CheckerFlag::FormatError) { Log(LogSwitch::Checker) << "FormatError." << endl; }
-    if (checkerObj & CheckerFlag::FlightNotAssignedError) { Log(LogSwitch::Checker) << "FlightNotAssignedError." << endl; }
-    if (checkerObj & CheckerFlag::IncompatibleAssignmentError) { Log(LogSwitch::Checker) << "IncompatibleAssignmentError." << endl; }
-    if (checkerObj & CheckerFlag::FlightOverlapError) { Log(LogSwitch::Checker) << "FlightOverlapError." << endl; }
+    if (checkerObj & CheckerFlag::CoordinateOverError) { Log(LogSwitch::Checker) << "FlightNotAssignedError." << endl; }
+    if (checkerObj & CheckerFlag::RectangleOverlapError) { Log(LogSwitch::Checker) << "IncompatibleAssignmentError." << endl; }
+  
     return false;
     #else
     checkerObj = 0;
@@ -256,56 +255,31 @@ bool Solver::check(Length &checkerObj) const {
 }
 
 void Solver::init() {
-	aux.isCompatible.resize(input.rectangles_size(), List<bool>(input.rectangles_size(), true));
-	/*
-    aux.isCompatible.resize(input.flights().size(), List<bool>(input.airport().gates().size(), true));
-    ID f = 0;
-    for (auto flight = input.flights().begin(); flight != input.flights().end(); ++flight, ++f) {
-        for (auto ig = flight->incompatiblegates().begin(); ig != flight->incompatiblegates().end(); ++ig) {
-            aux.isCompatible[f][*ig] = false;
-        }
-    }
-	*/
+	//aux.isCompatible.resize(input.rectangles_size(), List<bool>(input.rectangles_size(), true));
+
 }
 
 bool Solver::optimize(Solution &sln, ID workerId) {
 	Log(LogSwitch::Szx::Framework) << "worker " << workerId << " starts." << endl;
 	Random rand;
-	int rectangleNum = input.rectangles_size();
+	int rectangleNum = input.rectangles().size();
+	//cout << "rectangleNum" << rectangleNum;
 	bool status = true;
-	auto &placements(*sln.mutable_placements());
 	for (int i = 0; !timer.isTimeOut() && (i < rectangleNum); i++) {
 		// give the placements randomly
 		int x = rand.pick(0, 100);
 		int y = rand.pick(0, 100);
-		placements[i].set_id(i);
-		placements[i].set_x(x);
-		placements[i].set_y(y);
-		placements[i].set_rotated(false);
+		auto &placement(*sln.add_placements());
+		placement.set_id(i);
+		placement.set_x(x);
+		placement.set_y(y);
+		placement.set_rotated(false);
+
 		
 	}
 			
-	/*
-	Log(LogSwitch::Szx::Framework) << "worker " << workerId << " starts." << endl;
+	//cout << "the size of placements:"<<sln.placements().size();
 
-	ID gateNum = input.airport().gates().size();        
-	ID bridgeNum = input.airport().bridgenum();
-	ID flightNum = input.flights().size();
-
-	// reset solution state.
-	bool status = true;
-	auto &assignments(*sln.mutable_assignments());
-	assignments.Resize(flightNum, Problem::InvalidId);
-	sln.flightNumOnBridge = 0;
-
-
-	// TODO[0]: replace the following random assignment with your own algorithm.
-	for (ID f = 0; !timer.isTimeOut() && (f < flightNum); ++f) {
-		assignments[f] = rand.pick(gateNum);
-		if (assignments[f] < bridgeNum) { ++sln.flightNumOnBridge; } // record obj.
-	}
-
-	*/
 	Log(LogSwitch::Szx::Framework) << "worker " << workerId << " ends." << endl;
 	return status;
 	

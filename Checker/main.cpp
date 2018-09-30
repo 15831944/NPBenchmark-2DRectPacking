@@ -56,8 +56,8 @@ int main(int argc, char *argv[]) {
 	int areaSum = 0;
 	if (output.placements().size() != input.rectangles().size()) { error |= CheckerFlag::FormatError; }
 	for (auto rect1 = output.placements().begin(); rect1 != output.placements().end(); ++rect1) {
-		int width1 = input.rectangles(rect1->id).width;
-		int height1 = input.rectangles(rect1->id).height;
+		int width1 = input.rectangles(rect1->id()).width;
+		int height1 = input.rectangles(rect1->id()).height;
 		areaSum += width1 * height1;
 		if (rect1->x > bufferEdge || rect1->y > bufferEdge || rect1->x < 0 || rect1->y < 0 ||
 			rect1->x + width1 > bufferEdge || rect1->y + height1 > bufferEdge) {
@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	useRatio = areaSum / bufferEdge;
-		
+	return (error == 0) ? useRatio : ~error;
 	
     // check solution.
 	/*

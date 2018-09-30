@@ -99,7 +99,7 @@ void Simulator::run(const String &envPath) {
 void Simulator::debug() {
     Task task;
     task.instSet = "";
-    task.instId = "rand.g4b2f8h480";
+    task.instId = "rand.g51r";
     task.randSeed = "1500972793";
     //task.randSeed = to_string(RandSeed::generate());
     task.timeout = "180";
@@ -150,7 +150,6 @@ void Simulator::parallelBenchmark(int repeat) {
     task.logPath = Env::DefaultLogPath();
 
     ThreadPool<> tp(4);
-
     random_device rd;
     mt19937 rgen(rd());
     // EXTEND[szx][5]: read it from InstanceList.txt.
@@ -184,7 +183,10 @@ void Simulator::generateInstance(const InstanceTrait &trait) {
 		int idRand = rand.pick(0, rects.size());
 		//cutting a random rectangle into two part, then rotate the new one;
 		if (rects[idRand].height <= 2)
+		{
+			i--;
 			continue;
+		}
 		int cuttingHeight = rects[idRand].height;
 		int height = rand.pick(1, cuttingHeight-1);
 		rects[idRand].height = rects[idRand].width;
