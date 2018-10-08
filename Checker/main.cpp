@@ -20,7 +20,6 @@ int main(int argc, char *argv[]) {
 		CoordinateOverError = 0x2,
         RectangleOverlapError = 0x4
     };
-
     string inputPath;
     string outputPath;
 
@@ -49,7 +48,6 @@ int main(int argc, char *argv[]) {
     ostringstream oss;
     oss << ifs.rdbuf();
     jsonToProtobuf(oss.str(), output);
-
 	int error = 0;
 	float useRatio = 0;
 	int bufferEdge = output.length();
@@ -76,6 +74,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 	}
+	cout << "areaSum:" << areaSum;
 	useRatio = areaSum / bufferEdge;
 	return (error == 0) ? useRatio : ~error;
 	
@@ -128,7 +127,8 @@ int main(int argc, char *argv[]) {
             (flight.turnaround().end() - flight.turnaround().begin()) * pixelPerMinute, pixelPerGate,
             false, to_string(f), "000000", incompat ? "00c00080" : "4080ff80");
     }
-    draw.end();
+    
+	;
 	
     return (error == 0) ? flightNumOnBridge : ~error;
 	*/

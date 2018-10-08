@@ -244,8 +244,8 @@ bool Solver::check(Length &checkerObj) const {
     checkerObj = ~checkerObj;
     if (checkerObj == CheckerFlag::IoError) { Log(LogSwitch::Checker) << "IoError." << endl; }
     if (checkerObj & CheckerFlag::FormatError) { Log(LogSwitch::Checker) << "FormatError." << endl; }
-    if (checkerObj & CheckerFlag::CoordinateOverError) { Log(LogSwitch::Checker) << "FlightNotAssignedError." << endl; }
-    if (checkerObj & CheckerFlag::RectangleOverlapError) { Log(LogSwitch::Checker) << "IncompatibleAssignmentError." << endl; }
+    if (checkerObj & CheckerFlag::CoordinateOverError) { Log(LogSwitch::Checker) << "CoordinateOverError." << endl; }
+    if (checkerObj & CheckerFlag::RectangleOverlapError) { Log(LogSwitch::Checker) << "RectangleOverlapError." << endl; }
   
     return false;
     #else
@@ -274,9 +274,8 @@ bool Solver::optimize(Solution &sln, ID workerId) {
 		placement.set_x(x);
 		placement.set_y(y);
 		placement.set_rotated(false);
-
-		
 	}
+	sln.useRatio = 0.9;
 			
 	//cout << "the size of placements:"<<sln.placements().size();
 

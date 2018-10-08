@@ -6,7 +6,7 @@ using namespace szx;
 
 
 int main() {
-    Simulator::initDefaultEnvironment();
+    //Simulator::initDefaultEnvironment();
 
     Simulator sim;
     sim.debug();
