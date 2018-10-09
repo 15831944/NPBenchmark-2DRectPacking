@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
     oss << ifs.rdbuf();
     jsonToProtobuf(oss.str(), output);
 	int error = 0;
-	float useRatio = 0;
+	//double useRatio = 0;
 	int bufferEdge = output.length();
 	int areaSum = 0;
 	if (output.placements().size() != input.rectangles().size()) { error |= CheckerFlag::FormatError; }
@@ -75,8 +75,8 @@ int main(int argc, char *argv[]) {
 		}
 	}
 	cout << "areaSum:" << areaSum;
-	useRatio = areaSum / bufferEdge;
-	return (error == 0) ? useRatio : ~error;
+	//useRatio = areaSum / bufferEdge;
+	return (error == 0) ? output.length() : ~error;
 	
     // check solution.
 	/*

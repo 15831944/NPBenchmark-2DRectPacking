@@ -47,7 +47,7 @@ public:
             return true;
         }
 
-        float useRatio = 0;
+        //double useRatio = 0;
     };
     #pragma endregion Type
 

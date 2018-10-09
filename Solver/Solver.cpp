@@ -172,13 +172,13 @@ bool Solver::solve() {
 
     Log(LogSwitch::Szx::Framework) << "collect best result among all workers." << endl;
     int bestIndex = -1;
-    float bestRatio = 0;
+    int minLength = 0;
     for (int i = 0; i < workerNum; ++i) {
         if (!success[i]) { continue; }
-        Log(LogSwitch::Szx::Framework) << "worker " << i << " got " << solutions[i].useRatio << endl;
-        if (solutions[i].useRatio <= bestRatio) { continue; }
+        Log(LogSwitch::Szx::Framework) << "worker " << i << " got " << solutions[i].length()<< endl;
+        if (solutions[i].length()  > minLength) { continue; }
         bestIndex = i;
-        bestRatio = solutions[i].useRatio;
+        minLength = solutions[i].length();
     }
 
     env.rid = to_string(bestIndex);
@@ -195,7 +195,7 @@ void Solver::record() const {
 
     System::MemoryUsage mu = System::peakMemoryUsage();
 
-    float obj = output.useRatio;
+    int obj = output.length();
     Length checkerObj = -1;
     bool feasible = check(checkerObj);
 
@@ -204,13 +204,13 @@ void Solver::record() const {
         << env.rid << ","
         << env.instPath << ","
         << feasible << "," << (obj - checkerObj) << ","
-        << output.useRatio << ","
+        << output.length() << ","
         << timer.elapsedSeconds() << ","
         << mu.physicalMemory << "," << mu.virtualMemory << ","
         << env.randSeed << ","
         << cfg.toBriefStr() << ","
         << generation << "," << iteration << ","
-        << (100.0 * output.useRatio) << "%,";
+        << output.length() ;
 
     // record solution vector.
     // EXTEND[szx][2]: save solution in log.
@@ -263,8 +263,8 @@ bool Solver::optimize(Solution &sln, ID workerId) {
 	Log(LogSwitch::Szx::Framework) << "worker " << workerId << " starts." << endl;
 	Random rand;
 	int rectangleNum = input.rectangles().size();
-	//cout << "rectangleNum" << rectangleNum;
 	bool status = true;
+	int maxLength = 0;
 	for (int i = 0; !timer.isTimeOut() && (i < rectangleNum); i++) {
 		// give the placements randomly
 		int x = rand.pick(0, 100);
@@ -274,11 +274,11 @@ bool Solver::optimize(Solution &sln, ID workerId) {
 		placement.set_x(x);
 		placement.set_y(y);
 		placement.set_rotated(false);
+		maxLength = x + input.rectangles(i).width() > maxLength ? x + input.rectangles(i).width() : maxLength;
+		maxLength = y + input.rectangles(i).height() > maxLength ? y + input.rectangles(i).height() : maxLength;
 	}
-	sln.useRatio = 0.9;
-			
-	//cout << "the size of placements:"<<sln.placements().size();
-
+	sln.set_length(maxLength);
+	
 	Log(LogSwitch::Szx::Framework) << "worker " << workerId << " ends." << endl;
 	return status;
 	

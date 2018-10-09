@@ -209,7 +209,7 @@ void Simulator::generateInstance(const InstanceTrait &trait) {
 	}
 	
     ostringstream path;
-    path << InstanceDir() << "rand.g" << input.rectangles().size()
+    path << InstanceDir() << "rand." << input.rectangles().size()
         << "r" << ".json";
     save(path.str(), input);
 }
