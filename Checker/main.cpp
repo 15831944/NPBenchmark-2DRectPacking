@@ -26,14 +26,14 @@ int main(int argc, char *argv[]) {
     if (argc > 1) {
         inputPath = argv[1];
     } else {
-        cout << "input path: " << flush;
+		cerr << "input path: " << flush;
         cin >> inputPath;
     }
 
     if (argc > 2) {
         outputPath = argv[2];
     } else {
-        cout << "output path: " << flush;
+        cerr << "output path: " << flush;
         cin >> outputPath;
     }
 
@@ -76,8 +76,10 @@ int main(int argc, char *argv[]) {
 	}
 	cout << "areaSum:" << areaSum;
 	//useRatio = areaSum / bufferEdge;
-	return (error == 0) ? output.length() : ~error;
-	
+	//return (error == 0) ? output.length() : ~error;
+	int returnCode = (error == 0) ? output.length : ~error;
+	cout << returnCode << endl;
+	return returnCode;
     // check solution.
 	/*
     int error = 0;

@@ -172,7 +172,7 @@ bool Solver::solve() {
 
     Log(LogSwitch::Szx::Framework) << "collect best result among all workers." << endl;
     int bestIndex = -1;
-    int minLength = 0;
+    int minLength = 999;
     for (int i = 0; i < workerNum; ++i) {
         if (!success[i]) { continue; }
         Log(LogSwitch::Szx::Framework) << "worker " << i << " got " << solutions[i].length()<< endl;
