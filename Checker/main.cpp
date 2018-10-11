@@ -19,7 +19,6 @@ int main(int argc, char *argv[]) {
         FormatError = 0x1,
 		CoordinateOverError = 0x2,
         RectangleOverlapError = 0x4,
-		LackingRectanglesError = 0x8
     };
     string inputPath;
     string outputPath;
@@ -49,23 +48,24 @@ int main(int argc, char *argv[]) {
     ostringstream oss;
     oss << ifs.rdbuf();
     jsonToProtobuf(oss.str(), output);
+
 	//check solution.
 	int error = 0;
-	//double useRatio = 0;
 	int bufferEdge = output.length();
-	int areaSum = 0, numRect = 0;
+	int areaSum = 0;
 	if (output.placements().size() != input.rectangles().size()) { error |= CheckerFlag::FormatError; }
 	for (auto rect1 = output.placements().begin(); rect1 != output.placements().end(); ++rect1) {
+		//每个矩形是否超过缓冲区边界
 		int width1 = input.rectangles(rect1->id()).width();
 		int height1 = input.rectangles(rect1->id()).height();
 		areaSum += width1 * height1;
-		numRect++;
 		int rect1_x = rect1->x(), rect1_y = rect1->y();
 		if (rect1_x > bufferEdge || rect1_y > bufferEdge || rect1_x < 0 || rect1_y < 0 ||
 			rect1_x + width1 > bufferEdge || rect1_y + height1 > bufferEdge) {
 			error |= CheckerFlag::CoordinateOverError;	
 			break;
 		}
+		//每两个矩形之间是否有重叠
 		for (auto rect2 = rect1 + 1; rect2 != output.placements().end(); ++rect2) {
 			int rect2_id = rect2->id(), rect2_x = rect2->x(), rect2_y = rect2->y();
 			int width2 = input.rectangles(rect2_id).width();
@@ -77,9 +77,6 @@ int main(int argc, char *argv[]) {
 			}
 		}
 	}
-	if(numRect < output.placements().size())
-		error |= CheckerFlag::LackingRectanglesError;
-	cerr << "areaSum:" << areaSum << endl;
 	int returnCode = (error == 0) ? output.length() : ~error;
 	cout << returnCode << endl;
 	return returnCode;

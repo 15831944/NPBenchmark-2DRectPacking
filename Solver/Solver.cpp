@@ -200,17 +200,16 @@ void Solver::record() const {
     bool feasible = check(checkerObj);
 
     // record basic information.
-    log << env.friendlyLocalTime() << ","
-        << env.rid << ","
-        << env.instPath << ","
-        << feasible << "," << (obj - checkerObj) << ","
-        << output.length() << ","
-        << timer.elapsedSeconds() << ","
-        << mu.physicalMemory << "," << mu.virtualMemory << ","
-        << env.randSeed << ","
-        << cfg.toBriefStr() << ","
-        << generation << "," << iteration << ","
-        << output.length() ;
+	log << env.friendlyLocalTime() << ","
+		<< env.rid << ","
+		<< env.instPath << ","
+		<< feasible << "," << (obj - checkerObj) << ","
+		<< output.length() << ","
+		<< timer.elapsedSeconds() << ","
+		<< mu.physicalMemory << "," << mu.virtualMemory << ","
+		<< env.randSeed << ","
+		<< cfg.toBriefStr() << ","
+		<< generation << "," << iteration;
 
     // record solution vector.
     // EXTEND[szx][2]: save solution in log.
@@ -236,7 +235,8 @@ bool Solver::check(Length &checkerObj) const {
 		IoError = 0x0,
 		FormatError = 0x1,
 		CoordinateOverError = 0x2,
-		RectangleOverlapError = 0x4
+		RectangleOverlapError = 0x4,
+		LackingRectanglesError = 0x8
     };
 
     checkerObj = System::exec("Checker.exe " + env.instPath + " " + env.solutionPathWithTime());
@@ -246,7 +246,7 @@ bool Solver::check(Length &checkerObj) const {
     if (checkerObj & CheckerFlag::FormatError) { Log(LogSwitch::Checker) << "FormatError." << endl; }
     if (checkerObj & CheckerFlag::CoordinateOverError) { Log(LogSwitch::Checker) << "CoordinateOverError." << endl; }
     if (checkerObj & CheckerFlag::RectangleOverlapError) { Log(LogSwitch::Checker) << "RectangleOverlapError." << endl; }
-  
+	if (checkerObj & CheckerFlag::LackingRectanglesError) { Log(LogSwitch::Checker) << "LackingRectanglesError" << endl; }
     return false;
     #else
     checkerObj = 0;
@@ -255,11 +255,11 @@ bool Solver::check(Length &checkerObj) const {
 }
 
 void Solver::init() {
-	//aux.isCompatible.resize(input.rectangles_size(), List<bool>(input.rectangles_size(), true));
 
 }
 
 bool Solver::optimize(Solution &sln, ID workerId) {
+	//You should rewrite the code here!
 	Log(LogSwitch::Szx::Framework) << "worker " << workerId << " starts." << endl;
 	Random rand;
 	int rectangleNum = input.rectangles().size();
