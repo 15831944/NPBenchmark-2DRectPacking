@@ -56,8 +56,15 @@ int main(int argc, char *argv[]) {
 	if (output.placements().size() != input.rectangles().size()) { error |= CheckerFlag::FormatError; }
 	for (auto rect1 = output.placements().begin(); rect1 != output.placements().end(); ++rect1) {
 		//每个矩形是否超过缓冲区边界
+		
 		int width1 = input.rectangles(rect1->id()).width();
 		int height1 = input.rectangles(rect1->id()).height();
+		if (rect1->rotated){
+		//若矩形有旋转则交换高和宽的值
+			int t1 = width1; 
+			width1 = height1;
+			height1 = t1;
+		}
 		areaSum += width1 * height1;
 		int rect1_x = rect1->x(), rect1_y = rect1->y();
 		if (rect1_x > bufferEdge || rect1_y > bufferEdge || rect1_x < 0 || rect1_y < 0 ||
@@ -70,6 +77,11 @@ int main(int argc, char *argv[]) {
 			int rect2_id = rect2->id(), rect2_x = rect2->x(), rect2_y = rect2->y();
 			int width2 = input.rectangles(rect2_id).width();
 			int height2 = input.rectangles(rect2_id).height();
+			if (rect2->rotated){
+				int t2 = width2;
+				width2 = height2;
+				height2 = t2;
+			}
 			if (rect1_x + width1 > rect2_x && rect1_x < rect2_x + width2 ||
 				rect1_y + height1 > rect2_y && rect1_y < rect2_y + height2 ) {
 				error |= CheckerFlag::RectangleOverlapError;

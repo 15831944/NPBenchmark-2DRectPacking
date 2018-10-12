@@ -259,14 +259,14 @@ void Solver::init() {
 }
 
 bool Solver::optimize(Solution &sln, ID workerId) {
-	//You should rewrite the code here!
 	Log(LogSwitch::Szx::Framework) << "worker " << workerId << " starts." << endl;
 	Random rand;
 	int rectangleNum = input.rectangles().size();
 	bool status = true;
 	int maxLength = 0;
+
+	//replace the following random assignment with your own algorithm
 	for (int i = 0; !timer.isTimeOut() && (i < rectangleNum); i++) {
-		// give the placements randomly
 		int x = rand.pick(0, 100);
 		int y = rand.pick(0, 100);
 		auto &placement(*sln.add_placements());
