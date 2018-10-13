@@ -4,14 +4,14 @@
 #include <Windows.h>
 #include <Psapi.h>
 #else
-// EXTEND[szx][9]: get memory usage on *nix.
+// EXTEND[ck][9]: get memory usage on *nix.
 #endif // _OS_MS_WINDOWS
 
 
 using namespace std;
 
 
-namespace szx {
+namespace ck {
 
 System::MemoryUsage System::memoryUsage() {
     MemoryUsage mu = { 0, 0 };

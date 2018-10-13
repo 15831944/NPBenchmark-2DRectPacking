@@ -4,8 +4,8 @@
 /// note  : 1.	
 ////////////////////////////////
 
-#ifndef SMART_SZX_GATE_ASSIGNMENT_COMMON_H
-#define SMART_SZX_GATE_ASSIGNMENT_COMMON_H
+#ifndef SMART_CK_RECT_PACKING_COMMON_H
+#define SMART_CK_RECT_PACKING_COMMON_H
 
 
 #include <vector>
@@ -14,7 +14,7 @@
 #include <string>
 
 
-namespace szx {
+namespace ck {
 
 // zero-based consecutive integer identifier.
 using ID = int;
@@ -48,4 +48,4 @@ public:
 }
 
 
-#endif // SMART_SZX_GATE_ASSIGNMENT_COMMON_H
+#endif // SMART_CK_RECT_PACKING_COMMON_H

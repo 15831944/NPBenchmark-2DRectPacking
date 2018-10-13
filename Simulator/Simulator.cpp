@@ -16,7 +16,7 @@
 using namespace std;
 
 
-namespace szx {
+namespace ck {
 
 void Simulator::initDefaultEnvironment() {
     Solver::Environment env;
@@ -125,7 +125,7 @@ void Simulator::benchmark(int repeat) {
 
     random_device rd;
     mt19937 rgen(rd());
-    // EXTEND[szx][5]: read it from InstanceList.txt.
+    // EXTEND[ck][5]: read it from InstanceList.txt.
     vector<String> instList({ "rand.g4b2f8h480", "rand.g80b25f200h1440" });
     for (int i = 0; i < repeat; ++i) {
         //shuffle(instList.begin(), instList.end(), rgen);
@@ -152,7 +152,7 @@ void Simulator::parallelBenchmark(int repeat) {
     ThreadPool<> tp(4);
     random_device rd;
     mt19937 rgen(rd());
-    // EXTEND[szx][5]: read it from InstanceList.txt.
+    // EXTEND[ck][5]: read it from InstanceList.txt.
     vector<String> instList({ "rand.g4b2f8h480", "rand.g80b25f200h1440" });
     for (int i = 0; i < repeat; ++i) {
         //shuffle(instList.begin(), instList.end(), rgen);

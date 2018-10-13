@@ -10,7 +10,7 @@
 
 
 using namespace std;
-using namespace szx;
+//using namespace ck;
 using namespace pb;
 
 int main(int argc, char *argv[]) {

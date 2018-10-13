@@ -4,18 +4,18 @@
 /// note  : 1.	
 ////////////////////////////////
 
-#ifndef SMART_SZX_GATE_ASSIGNMENT_LOG_SWITCH_H
-#define SMART_SZX_GATE_ASSIGNMENT_LOG_SWITCH_H
+#ifndef SMART_CK_RECT_PACKING_LOG_SWITCH_H
+#define SMART_CK_RECT_PACKING_LOG_SWITCH_H
 
 
 #include "Utility.h"
 
 
-namespace szx {
+namespace ck {
 
 struct LogSwitch {
-    // TODO[szx][0]: turn off all logs before the release.
-    enum Szx {
+    // TODO[ck][0]: turn off all logs before the release.
+    enum Ck {
         Main = Log::Level::Info,
         Cli = Log::Level::Off,
         Framework = Log::Level::Debug,
@@ -33,4 +33,4 @@ struct LogSwitch {
 }
 
 
-#endif // SMART_SZX_GATE_ASSIGNMENT_LOG_SWITCH_H
+#endif // SMART_CK_RECT_PACKING_LOG_SWITCH_H

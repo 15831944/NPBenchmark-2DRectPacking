@@ -2,5 +2,5 @@
 
 
 int main(int argc, char *argv[]) {
-    return szx::Solver::Cli::run(argc, argv);
+    return ck::Solver::Cli::run(argc, argv);
 }

@@ -4,8 +4,8 @@
 /// note  : 1.	
 ////////////////////////////////
 
-#ifndef SMART_SZX_GATE_ASSIGNMENT_SOLVER_H
-#define SMART_SZX_GATE_ASSIGNMENT_SOLVER_H
+#ifndef SMART_CK_RECT_PACKING_SOLVER_H
+#define SMART_CK_RECT_PACKING_SOLVER_H
 
 
 #include "Config.h"
@@ -22,7 +22,7 @@
 #include "Problem.h"
 
 
-namespace szx {
+namespace ck {
 
 class Solver {
     #pragma region Type
@@ -46,7 +46,7 @@ public:
         static String AuthorNameSwitch() { return "-name"; }
         static String HelpSwitch() { return "-h"; }
 
-        static String AuthorName() { return "szx"; }
+        static String AuthorName() { return "ck"; }
         static String HelpInfo() {
             return "Pattern (args can be in any order):\n"
                 "  exe (-p path) (-o path) [-s int] [-t seconds] [-name]\n"
@@ -103,7 +103,7 @@ public:
         }
 
 
-        Algorithm alg = Configuration::Algorithm::Greedy; // OPTIMIZE[szx][3]: make it a list to specify a series of algorithms to be used by each threads in sequence.
+        Algorithm alg = Configuration::Algorithm::Greedy; // OPTIMIZE[ck][3]: make it a list to specify a series of algorithms to be used by each threads in sequence.
         int threadNumPerWorker = (std::min)(1, static_cast<int>(std::thread::hardware_concurrency()));
     };
 
@@ -221,4 +221,4 @@ public:
 }
 
 
-#endif // SMART_SZX_GATE_ASSIGNMENT_SOLVER_H
+#endif // SMART_CK_RECT_PACKING_SOLVER_H
