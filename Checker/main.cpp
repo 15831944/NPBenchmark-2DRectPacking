@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
 		
 		int width1 = input.rectangles(rect1->id()).width();
 		int height1 = input.rectangles(rect1->id()).height();
-		if (rect1->rotated){
+		if (rect1->rotated()){
 		//若矩形有旋转则交换高和宽的值
 			int t1 = width1; 
 			width1 = height1;
@@ -77,7 +77,7 @@ int main(int argc, char *argv[]) {
 			int rect2_id = rect2->id(), rect2_x = rect2->x(), rect2_y = rect2->y();
 			int width2 = input.rectangles(rect2_id).width();
 			int height2 = input.rectangles(rect2_id).height();
-			if (rect2->rotated){
+			if (rect2->rotated()){
 				int t2 = width2;
 				width2 = height2;
 				height2 = t2;

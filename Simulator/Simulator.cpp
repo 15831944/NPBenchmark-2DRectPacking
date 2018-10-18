@@ -126,7 +126,7 @@ void Simulator::benchmark(int repeat) {
     random_device rd;
     mt19937 rgen(rd());
     // EXTEND[ck][5]: read it from InstanceList.txt.
-    vector<String> instList({ "rand.g4b2f8h480", "rand.g80b25f200h1440" });
+    vector<String> instList({ "rand.g51r", "rand.g101r" });
     for (int i = 0; i < repeat; ++i) {
         //shuffle(instList.begin(), instList.end(), rgen);
         for (auto inst = instList.begin(); inst != instList.end(); ++inst) {

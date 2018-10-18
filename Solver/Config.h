@@ -94,7 +94,7 @@
 
 #pragma region DebugHelper
 // [off] activate test codes like additional check for data consistency..
-#define ck_DEBUG  _CC_MS_VC
+#define CK_DEBUG  _CC_MS_VC
 #pragma endregion DebugHelper
 
 
