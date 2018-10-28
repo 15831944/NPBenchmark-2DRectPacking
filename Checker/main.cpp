@@ -82,13 +82,15 @@ int main(int argc, char *argv[]) {
 				width2 = height2;
 				height2 = t2;
 			}
-			if (rect1_x + width1 > rect2_x && rect1_x < rect2_x + width2 ||
+			if (rect1_x + width1 > rect2_x && rect1_x < rect2_x + width2 &&
 				rect1_y + height1 > rect2_y && rect1_y < rect2_y + height2 ) {
 				error |= CheckerFlag::RectangleOverlapError;
 				break;
 			}
 		}
 	}
+    //cout << "length: " << output.length() << endl;
+    //cout << "error" << error << endl;
 	int returnCode = (error == 0) ? output.length() : ~error;
 	cout << returnCode << endl;
 	return returnCode;

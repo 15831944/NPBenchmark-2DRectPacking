@@ -266,17 +266,17 @@ bool Solver::optimize(Solution &sln, ID workerId) {
 	int maxLength = 0;
 
 	//replace the following random assignment with your own algorithm
-	for (int i = 0; !timer.isTimeOut() && (i < rectangleNum); i++) {
-		int x = rand.pick(0, 100);
-		int y = rand.pick(0, 100);
-		auto &placement(*sln.add_placements());
-		placement.set_id(i);
-		placement.set_x(x);
-		placement.set_y(y);
-		placement.set_rotated(false);
-		maxLength = x + input.rectangles(i).width() > maxLength ? x + input.rectangles(i).width() : maxLength;
-		maxLength = y + input.rectangles(i).height() > maxLength ? y + input.rectangles(i).height() : maxLength;
-	}
+    for (int i = 0; !timer.isTimeOut() && (i < rectangleNum); i++) {
+        int x = rand.pick(0, 100);
+        int y = rand.pick(0, 100);
+        auto &placement(*sln.add_placements());
+        placement.set_id(i);
+        placement.set_x(x);
+        placement.set_y(y);
+        placement.set_rotated(false);
+        maxLength = x + input.rectangles(i).width() > maxLength ? x + input.rectangles(i).width() : maxLength;
+        maxLength = y + input.rectangles(i).height() > maxLength ? y + input.rectangles(i).height() : maxLength;
+    }
 	sln.set_length(maxLength);
 	
 	Log(LogSwitch::Ck::Framework) << "worker " << workerId << " ends." << endl;
